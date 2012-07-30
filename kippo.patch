@@ -1,0 +1,53 @@
+--- kippo/core/honeypot.py	2010-10-25 14:57:14.000000000 +0000
++++ ./kippo/core/honeypot.py	2012-07-16 19:41:31.000000000 +0000
+@@ -17,6 +17,24 @@
+ from kippo.core.config import config
+ import commands
++import json
++
++#HONEYPI
++class HoneyPiLog():
++  def __init__(self, logfile):
++    self.logfile = logfile
++    self.ip = None
++    self.login = None
++    self.pwd = None
++    self.auth = None
++
++  def write(self):
++    f = open(self.logfile, 'a')
++    f.write('%s\n' % (json.dumps({'ip': self.ip, 'login': self.login, 'pwd': self.pwd, 'auth': self.auth})))
++    f.close()
++
++honeyPiLog = HoneyPiLog('/opt/kippo-0.5/log/HoneyPi.log')
++#HONEYPI
++
++
+ class HoneyPotCommand(object):
+     def __init__(self, honeypot, *args):
+         self.honeypot = honeypot
+@@ -370,6 +388,8 @@
+             self.transport.getHost().host, self.transport.getHost().port,
+             self.transport.sessionno)
+         transport.SSHServerTransport.connectionMade(self)
++        #HONEYPI
++        honeyPiLog.ip = self.transport.getPeer().host
+ 
+     def ssh_KEXINIT(self, packet):
+         print 'Remote SSH version: %s' % (self.otherVersionString,)
+@@ -444,8 +464,15 @@
+         passdb.close()
+         if success:
+             print 'login attempt [%s/%s] succeeded' % (username, password)
++            #HONEYPI
++            honeyPiLog.auth = 'OK'
+         else:
+             print 'login attempt [%s/%s] failed' % (username, password)
++            #HONEYPI
++            honeyPiLog.auth = 'KO'
++        honeyPiLog.login = username
++        honeyPiLog.pwd = password
++        honeyPiLog.write()
+         return success
+ 
+ def getRSAKeys():

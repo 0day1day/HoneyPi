@@ -1,0 +1,24 @@
+HONEYPI
+=======
+
+Author : Steeve Barbeau
+-------- @steevebarbeau
+         http://www.sbarbeau.fr
+         http://blog.sbarbeau.fr
+
+
+Some scripts I use to centralize data from all my honeypots and get some stats and informations about binaries ..
+         
+
+
+Dependances :
+-------------
+
+Yara 1.6 & Yara-python 1.6 : http://code.google.com/p/yara-project/
+PyGeoIP : http://github.com/appliedsec/pygeoip
+python-magic
+pefile
+python-cymru-services : https://github.com/trolldbois/python-cymru-services/raw/master/README
+adns
+IPy
+playlog.py (from kippo)
