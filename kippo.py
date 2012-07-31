@@ -18,7 +18,7 @@ class Kippo():
     self.geoip_file = None
     try:
       self.geoip_file = pygeoip.GeoIP(geoip_file, pygeoip.MEMORY_CACHE)
-    except e:
+    except Exception, e:
       print 'ERROR %s' % e
 
   def load_json_file(self):
