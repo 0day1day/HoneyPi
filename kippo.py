@@ -2,7 +2,7 @@
 import sys, json, glob, os, pygeoip, playlog, magic
 from datetime import date
 
-class Kippo():
+class Kippo:
   def __init__(self, path, geoip_file):
     """docstring for __init__"""
     self.path = path
@@ -97,7 +97,6 @@ class Kippo():
       if category == 'ip' and (self.geoip_file is not None):
         for key, value in tmp[:n]:
           print '%s [%s] : %s' % (key, self.geoip_file.country_code_by_addr(key), value)
-
       else:  
         for key, value in tmp[:n]:
           print '%s : %s' % (key,value)
