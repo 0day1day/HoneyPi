@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-import pefile, sys
+import pefile, string, sys
 
 class PeInfos:
   """
@@ -32,7 +32,7 @@ ImageBase : %s""" % (hex(self.file.OPTIONAL_HEADER.AddressOfEntryPoint), hex(sel
     """docstring for sections"""
     print "\n\n- Sections -"
     for section in self.file.sections:
-      print section.Name.rstrip('\x00')
+      print filter(lambda x: x in string.printable, section.Name)
 
   def imports(self):
     print "\n\n- Imports -"
