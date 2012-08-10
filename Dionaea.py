@@ -87,7 +87,10 @@ class Dionaea:
     print '\n\nCONNECTION REMOTE HOST'
     while line: 
       if self.geoip_file:
-        print '%s [%s / %s] : %d' % (line['remote_host'], self.geoip_file.country_code_by_addr(line['remote_host']), self.geoip_file.country_name_by_addr(line['remote_host']), line['number'])
+        try:
+          print '%s [%s / %s] : %d' % (line['remote_host'], self.geoip_file.country_code_by_addr(line['remote_host']), self.geoip_file.country_name_by_addr(line['remote_host']), line['number'])
+        except pygeoip.GeoIPError, e:
+          print 'ERROR %s' % e
       else:
         print '%s : %d' % (line['remote_host'], line['number'])
       line = self.cur.fetchone()

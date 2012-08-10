@@ -112,7 +112,11 @@ class VirusTotalUploader:
 """  % (json_res['scan_date'], json_res['positives'], json_res['total'], json_res['permalink'])
         print "  AV result summary :"
         for av in self.av_list:
-          print "    %s : %s" % (av, json_res['scans'][av]['result'])
+          try:
+            print "    %s : %s" % (av, json_res['scans'][av]['result'])
+          except KeyError, e:
+            print "    %s : No results" % (av)
+
 
         # TeamCymru infos : Detection rate / timestamp
         cymru = teamCymruCheck(file_path)
