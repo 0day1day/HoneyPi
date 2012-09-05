@@ -72,7 +72,7 @@ def teamCymruCheck(file_path):
 class VirusTotalUploader:
   def __init__(self, path, recursive, yes, days):
     """docstring for __init__"""
-    self.apikey = '49d1e84afff18f626f23f2d39be0a8f718b0ed644a9577e488ade7f7cd6916b5'
+    self.apikey = ''
     self.url_report = 'https://www.virustotal.com/vtapi/v2/file/report'
     self.url_scan = 'https://www.virustotal.com/vtapi/v2/file/scan'
     self.av_list = ['Avast', 'ClamAV', 'F-Secure', 'Kaspersky', 'Microsoft']

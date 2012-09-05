@@ -26,13 +26,30 @@ class PeInfos:
       print 'DRIVER file'
     print """
 Address Of Entry Point : %s
-ImageBase : %s""" % (hex(self.file.OPTIONAL_HEADER.AddressOfEntryPoint), hex(self.file.OPTIONAL_HEADER.ImageBase))
+ImageBase : %s\n""" % (hex(self.file.OPTIONAL_HEADER.AddressOfEntryPoint), hex(self.file.OPTIONAL_HEADER.ImageBase))
+    try:
+      for fileinfo in self.file.FileInfo:
+        if fileinfo.Key == 'StringFileInfo':
+          for st in fileinfo.StringTable:
+            for entry in st.entries.items():
+              print '%s: %s' % (entry[0], entry[1])
+
+        if fileinfo.Key == 'VarFileInfo':
+          for var in fileinfo.Var:
+            print '%s: %s' % var.entry.items()[0]
+    except Exception, e:
+      print 'ERROR : Fail to get file\'s informations (%s)' % (e)
 
   def sections(self):
     """docstring for sections"""
     print "\n\n- Sections -"
     for section in self.file.sections:
-      print filter(lambda x: x in string.printable, section.Name)
+      entropy = section.get_entropy()
+      output = filter(lambda x: x in string.printable, section.Name)
+      output += "\tEntropy : %f" % entropy
+      if ((entropy > 0 and entropy < 1) or entropy > 7):
+        output += " [SUSPICIOUS]"
+      print output
 
   def imports(self):
     print "\n\n- Imports -"
