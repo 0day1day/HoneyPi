@@ -44,6 +44,10 @@ ImageBase : %s\n""" % (hex(self.file.OPTIONAL_HEADER.AddressOfEntryPoint), hex(s
             print '%s: %s' % var.entry.items()[0]
     except Exception, e:
       print 'ERROR : Fail to get file\'s informations (%s)' % (e)
+    try:
+      print "Number of ressources : %i" % len(self.file.DIRECTORY_ENTRY_RESOURCE.entries)
+    except AttributeError, e:
+      print "ERROR : %s" % e
 
   def sections(self):
     """docstring for sections"""
