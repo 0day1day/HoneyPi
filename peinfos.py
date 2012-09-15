@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-import pefile, string, sys
+import pefile, string, sys, time
 
 class PeInfos:
   """
@@ -24,6 +24,11 @@ class PeInfos:
       print 'DLL file'
     elif self.file.is_driver():
       print 'DRIVER file'
+    subsystem = self.file.OPTIONAL_HEADER.Subsystem
+    print "Subsystem : %s" % pefile.SUBSYSTEM_TYPE[subsystem]
+    cdate = time.gmtime(self.file.NT_HEADERS.FILE_HEADER.TimeDateStamp)
+    print "Compilation date : %i/%i/%i %i:%i" % (cdate.tm_mday, cdate.tm_mon,
+     cdate.tm_year, cdate.tm_hour, cdate.tm_min)
     print """
 Address Of Entry Point : %s
 ImageBase : %s\n""" % (hex(self.file.OPTIONAL_HEADER.AddressOfEntryPoint), hex(self.file.OPTIONAL_HEADER.ImageBase))
@@ -43,10 +48,15 @@ ImageBase : %s\n""" % (hex(self.file.OPTIONAL_HEADER.AddressOfEntryPoint), hex(s
   def sections(self):
     """docstring for sections"""
     print "\n\n- Sections -"
+    print "Name \t Virtual Size \t Raw Size \t Entropy"
     for section in self.file.sections:
       entropy = section.get_entropy()
       output = filter(lambda x: x in string.printable, section.Name)
-      output += "\tEntropy : %f" % entropy
+      # Virtual and raw sizes
+      output += "\t %X \t\t %X" % (section.Misc_VirtualSize,
+       section.SizeOfRawData)
+      # Entropy
+      output += "\t\t %f" % entropy
       if ((entropy > 0 and entropy < 1) or entropy > 7):
         output += " [SUSPICIOUS]"
       print output
